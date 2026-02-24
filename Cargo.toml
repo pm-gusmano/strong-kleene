@@ -2,6 +2,14 @@
 name = "strong-kleene"
 version = "0.1.0"
 edition = "2024"
+authors = ["Paul Gusmano <paul.gusmano@outlook.com>"]
+
+description = "Another implementation of Strong Kleene logic in Rust."
+documentation = "https://docs.rs/strong-kleene"
+repository = "https://github.com/pm-gusmano/strong-kleene"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+
 
 [dependencies]
 
