@@ -1,4 +1,4 @@
-use std::{
+use core::{
     fmt::Display,
     ops::{BitOr, Not},
 };
