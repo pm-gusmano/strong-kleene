@@ -1,4 +1,5 @@
 use core::{
+    error::Error,
     fmt::Display,
     ops::{BitOr, Not},
 };
@@ -25,6 +26,32 @@ impl From<bool> for Trit {
         if value { Trit::True } else { Trit::False }
     }
 }
+
+impl TryFrom<Trit> for bool {
+    type Error = UnknownToBoolError;
+
+    fn try_from(value: Trit) -> Result<Self, Self::Error> {
+        match value {
+            Trit::True => Ok(true),
+            Trit::False => Ok(false),
+            Trit::Unknown => Err(UnknownToBoolError),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct UnknownToBoolError;
+
+impl Display for UnknownToBoolError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "Cannot convert Trit::Unknown to bool; handle Unknown explicitly!"
+        )
+    }
+}
+
+impl Error for UnknownToBoolError {}
 
 impl Not for Trit {
     type Output = Self;
@@ -60,6 +87,14 @@ mod tests {
     #[case(false, Trit::False)]
     fn test_from_bool(#[case] input: bool, #[case] expected: Trit) {
         assert_eq!(Trit::from(input), expected);
+    }
+
+    #[rstest]
+    #[case(Trit::True, Ok(true))]
+    #[case(Trit::False, Ok(false))]
+    #[case(Trit::Unknown, Err(UnknownToBoolError))]
+    fn from_trit_to_bool(#[case] input: Trit, #[case] expected: Result<bool, UnknownToBoolError>) {
+        assert_eq!(bool::try_from(input), expected);
     }
 
     #[rstest]
