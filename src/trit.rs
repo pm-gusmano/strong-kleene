@@ -4,11 +4,32 @@ use core::{
     ops::{BitAnd, BitOr, BitXor, Not},
 };
 
+/// Three-valued logic value for strong Kleene semantics.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Trit {
+    /// Logical false.
     False = 0,
+    /// Logical true.
     True = 1,
+    /// Logical value is currently unknown.
     Unknown = 2,
+}
+
+impl Trit {
+    /// Returns `true` if this value is [`Trit::True`].
+    pub fn is_true(&self) -> bool {
+        matches!(self, Trit::True)
+    }
+
+    /// Returns `true` if this value is [`Trit::False`].
+    pub fn is_false(&self) -> bool {
+        matches!(self, Trit::False)
+    }
+
+    /// Returns `true` if this value is [`Trit::Unknown`].
+    pub fn is_unknown(&self) -> bool {
+        matches!(self, Trit::Unknown)
+    }
 }
 
 impl Display for Trit {
@@ -39,6 +60,7 @@ impl TryFrom<Trit> for bool {
     }
 }
 
+/// Error returned when converting [`Trit::Unknown`] into `bool`.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnknownToBoolError;
 
