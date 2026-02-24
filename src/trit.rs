@@ -1,7 +1,7 @@
 use core::{
     error::Error,
     fmt::Display,
-    ops::{BitOr, Not},
+    ops::{BitAnd, BitOr, Not},
 };
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -77,6 +77,18 @@ impl BitOr for Trit {
     }
 }
 
+impl BitAnd for Trit {
+    type Output = Self;
+
+    fn bitand(self, other: Trit) -> Self::Output {
+        match (self, other) {
+            (Trit::False, _) | (_, Trit::False) => Trit::False,
+            (Trit::True, Trit::True) => Trit::True,
+            _ => Trit::Unknown,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -140,5 +152,19 @@ mod tests {
     #[rstest]
     fn test_or_idempotent(#[values(Trit::True, Trit::Unknown, Trit::False)] a: Trit) {
         assert_eq!(a | a, a);
+    }
+
+    #[rstest]
+    #[case(Trit::True, Trit::True, Trit::True)]
+    #[case(Trit::True, Trit::Unknown, Trit::Unknown)]
+    #[case(Trit::True, Trit::False, Trit::False)]
+    #[case(Trit::Unknown, Trit::True, Trit::Unknown)]
+    #[case(Trit::Unknown, Trit::Unknown, Trit::Unknown)]
+    #[case(Trit::Unknown, Trit::False, Trit::False)]
+    #[case(Trit::False, Trit::True, Trit::False)]
+    #[case(Trit::False, Trit::Unknown, Trit::False)]
+    #[case(Trit::False, Trit::False, Trit::False)]
+    fn and_truth_table(#[case] a: Trit, #[case] b: Trit, #[case] expected: Trit) {
+        assert_eq!(a & b, expected);
     }
 }
