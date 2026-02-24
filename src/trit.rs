@@ -6,9 +6,9 @@ use core::{
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Trit {
-    True,
-    Unknown,
-    False,
+    False = 0,
+    True = 1,
+    Unknown = 2,
 }
 
 impl Display for Trit {
