@@ -20,6 +20,12 @@ impl Display for Trit {
     }
 }
 
+impl From<bool> for Trit {
+    fn from(value: bool) -> Self {
+        if value { Trit::True } else { Trit::False }
+    }
+}
+
 impl Not for Trit {
     type Output = Self;
 
@@ -48,6 +54,13 @@ impl BitOr for Trit {
 mod tests {
     use super::*;
     use rstest::rstest;
+
+    #[rstest]
+    #[case(true, Trit::True)]
+    #[case(false, Trit::False)]
+    fn test_from_bool(#[case] input: bool, #[case] expected: Trit) {
+        assert_eq!(Trit::from(input), expected);
+    }
 
     #[rstest]
     #[case(Trit::True, Trit::False)]
