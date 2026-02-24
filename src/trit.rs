@@ -1,10 +1,23 @@
-use std::ops::{BitOr, Not};
+use std::{
+    fmt::Display,
+    ops::{BitOr, Not},
+};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Trit {
     True,
     Unknown,
     False,
+}
+
+impl Display for Trit {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Trit::True => write!(f, "true"),
+            Trit::Unknown => write!(f, "unknown"),
+            Trit::False => write!(f, "false"),
+        }
+    }
 }
 
 impl Not for Trit {
